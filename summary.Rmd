@@ -1,0 +1,43 @@
+---
+title: "QC Summary"
+author: "Roger Pique-Regi"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(kableExtra)
+knitr::opts_chunk$set(echo = TRUE)
+aa <- read_csv("all_summary.csv")
+aa
+```
+
+## Table
+
+```{r}
+aa[,c(1,5,8,14,16,17,19,20,26,28)] %>% 
+  column_to_rownames("Library_ID") %>%
+  kbl()
+```
+
+##  Plots
+
+```{r results='asis', echo=FALSE}
+oldcn <- colnames(aa)
+colnames(aa) <- gsub("-","",gsub(" ", "_", colnames(aa)))
+for(i in 5:ncol(aa)){
+  coln <- colnames(aa)[i]
+  cat("### ",oldcn[i],"\n\n")
+  pl <-  aa %>% ggplot(aes_string(x="Library_ID",y=coln)) +
+      geom_bar(stat = "identity") +   ##    ggtitle(coln) + 
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 45, hjust = 1) # Tilting labels at 45 degrees
+      )
+  print(pl)
+  cat(" ","\n\n")
+}
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

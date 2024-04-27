@@ -33,6 +33,9 @@ do
     cp $f/web_summary.html $destfolder/$f.html 
 done
 
+module load R 
+Rscript makesummary.R 
 
 cp summary.tsv $destfolder/
 cp all_summary.csv $destfolder/
+cp summary.html $destfolder/
